@@ -5,6 +5,12 @@ import Notiflix from 'notiflix';
 
 const input = document.querySelector(`#datetime-picker`);
 const startBtn = document.querySelector(`button[data-start]`);
+const daysEl = document.querySelector(`span[data-days]`);
+const hoursEl = document.querySelector(`span[data-hours]`);
+const minutesEl = document.querySelector(`span[data-minutes]`);
+const secondsEl = document.querySelector(`span[data-seconds]`);
+
+
 
 startBtn.addEventListener(`click`, onStartBtnClick);
 startBtn.disabled = true;
@@ -18,31 +24,33 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
         if(selectedDates[0] < options.defaultDate){
-            alert ("Please choose a date in the future");
+            Notiflix.Notify.failure('Please choose a date in the future');
         }
         startBtn.disabled = false;
-      console.log(selectedDates[0].getTime());
+    //   console.log(selectedDates[0].getTime());
       TIMER_DEADLINE = selectedDates[0];
+    //   console.log(TIMER_DEADLINE);
     },
   };
  
-  console.log(TIMER_DEADLINE);
 
   flatpickr(input, options);
   
-  
 
   function onStartBtnClick(evt){
-    const now = Date.now();
-    const diff = TIMER_DEADLINE - now;
     setInterval(() =>{
-        const currenttime = Date.now();
-        const targettime = currenttime - diff;
-        const timeComponents = convertMs(targettime)
-        console.log(timeComponents);
+        const now = Date.now();
+        const diff = TIMER_DEADLINE - now;
+        const timeComponents = convertMs(diff)
+        updateTimer(timeComponents)
+        // console.log(`${days}:${hours}:${minutes}:${seconds}`);
     }, 1000);
-//    console.log(diff);
+
     
+  }
+
+  function addLeadingZero(value) {
+    return String(value).padStart(2, "0");
   }
 
   function convertMs(ms) {
@@ -55,17 +63,22 @@ const options = {
     // Remaining days
     const days = Math.floor(ms / day);
     // Remaining hours
-    const hours = Math.floor((ms % day) / hour);
+    const hours = addLeadingZero(Math.floor((ms % day) / hour));
     // Remaining minutes
-    const minutes = Math.floor(((ms % day) % hour) / minute);
+    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
     // Remaining seconds
-    const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+    const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
   
     return { days, hours, minutes, seconds };
   }
   
-//   addLeadingZero(value) {
-//     return String(value).padStart(2, "0");
-//   }
+  function updateTimer ({ days, hours, minutes, seconds }){
+    daysEl.textContent = `${days}`;
+    hoursEl.textContent = `${hours}`;
+    minutesEl.textContent = `${minutes}`;
+    secondsEl.textContent = `${seconds}`;
+    
+  }
+  
 
   
