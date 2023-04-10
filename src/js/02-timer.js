@@ -12,6 +12,8 @@ const secondsEl = document.querySelector(`span[data-seconds]`);
 
 
 
+
+
 startBtn.addEventListener(`click`, onStartBtnClick);
 startBtn.disabled = true;
 
