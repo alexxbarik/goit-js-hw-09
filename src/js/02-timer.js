@@ -40,11 +40,17 @@ const options = {
   
 
   function onStartBtnClick(evt){
-    setInterval(() =>{
+    const timerId = setInterval(() =>{
         const now = Date.now();
         const diff = TIMER_DEADLINE - now;
         const timeComponents = convertMs(diff)
         updateTimer(timeComponents)
+        console.log (diff);
+        if(diff <= 1000){
+          clearInterval(timerId)
+        }
+       
+        
         // console.log(`${days}:${hours}:${minutes}:${seconds}`);
     }, 1000);
 
